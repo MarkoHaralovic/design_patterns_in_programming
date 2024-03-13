@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <malloc.h>
 
 char const* dogGreet(void){
   return "vau!";
@@ -56,6 +57,14 @@ struct Animal* createCat(char const* name){
    return ConstructCat(animal,name);
 }
 
+struct Animal** createNdogs(const char** names[], int n){
+   struct Animal** dogs = (struct Animal**) malloc(n * sizeof(struct Animal*));
+   for(int i = 0; i < n; i++){
+      dogs[i] = createDog(names[i]);
+   }
+   return dogs;
+};
+
 
 //   Hamlet pozdravlja: vau!
 //   Ofelija pozdravlja: mijau!
@@ -78,6 +87,20 @@ void testAnimals(void){
   animalPrintMenu(p3);
 
   free(p1); free(p2); free(p3);
+
+  struct Animal stackDog;
+  ConstructDog(&stackDog, "Laertes");
+  animalPrintGreeting(&stackDog);
+  animalPrintMenu(&stackDog);
+
+  const char* dog_names[] = {"psic1", "psic2", "psic3", "psic4", "psic5"};
+  struct Animal** dogs = createNdogs(dog_names, 5);
+ 
+  for(int i = 0; i < 5; i++) {
+      free(dogs[i]);
+  }
+  free(dogs);
+
 }
 
 int main(){
