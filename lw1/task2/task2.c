@@ -76,7 +76,7 @@ Square* ConstructSquare(Square* square, int lower_bound, int upper_bound) {
 }
 
 Linear* ConstructLinear(Linear* linear, int lower_bound, int upper_bound, double a, double b) {
-   ConstructUnaryFunction((Unary_Function*) linear,lower_bound,upper_bound);
+   linear = ConstructUnaryFunction((Unary_Function*) linear,lower_bound,upper_bound);
    linear->a = a; 
    linear->b = b;
    linear->virtualTable = linear_virtual_table;
