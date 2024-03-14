@@ -70,13 +70,13 @@ Unary_Function* ConstructUnaryFunction(Unary_Function* unary_function, int lower
 }
 
 Square* ConstructSquare(Square* square, int lower_bound, int upper_bound) {
-   ConstructUnaryFunction((Unary_Function * ) square,lower_bound,upper_bound);
+   square = ConstructUnaryFunction((Unary_Function * ) square,lower_bound,upper_bound);
    square->virtualTable = square_virtual_table;
    return square;
 }
 
 Linear* ConstructLinear(Linear* linear, int lower_bound, int upper_bound, double a, double b) {
-   linear = ConstructUnaryFunction((Unary_Function*) linear,lower_bound,upper_bound);
+   ConstructUnaryFunction((Unary_Function*) linear,lower_bound,upper_bound);
    linear->a = a; 
    linear->b = b;
    linear->virtualTable = linear_virtual_table;
