@@ -25,6 +25,12 @@ typedef struct{
    double b;
 } Linear;
 
+double value_at(Unary_Function* function , double x){
+   return function->virtualTable[0](function,x);
+}
+double negative_value_at(Unary_Function* function , double x){
+   return -value_at(function,x);
+}
 double square_value_at(Square* square, double x){
    return x*x;
 }
@@ -38,7 +44,7 @@ double linear_negative_value_at(Linear* linear,  double x){
    return -linear_value_at(linear, x);
 }
 
-PTRFUN unary_virtual_table[2] = {(PTRFUN) NULL, (PTRFUN) NULL};
+PTRFUN unary_virtual_table[2] = {(PTRFUN) NULL, (PTRFUN) negative_value_at};
 PTRFUN linear_virtual_table[2] = {(PTRFUN) linear_value_at,(PTRFUN)  linear_negative_value_at};
 PTRFUN square_virtual_table[2] = {(PTRFUN) square_value_at,(PTRFUN)  square_negative_value_at};
 
@@ -48,7 +54,6 @@ void tabulate(Unary_Function* unary_function)
     for(int x = unary_function->lower_bound; x <= unary_function->upper_bound; ++x)
         printf("f(%d)=%lf\n", x, (unary_function->virtualTable)[0](unary_function, x));
 }
-
 
 static bool same_functions_for_ints(Unary_Function* f1, Unary_Function *f2, double tolerance){
     if(f1->lower_bound != f2->lower_bound) return false;
@@ -60,7 +65,6 @@ static bool same_functions_for_ints(Unary_Function* f1, Unary_Function *f2, doub
     }
     return true;
 }
-
 
 Unary_Function* ConstructUnaryFunction(Unary_Function* unary_function, int lower_bound, int upper_bound) {
     unary_function->lower_bound = lower_bound;
