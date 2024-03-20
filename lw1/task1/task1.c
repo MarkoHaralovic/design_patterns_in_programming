@@ -23,6 +23,14 @@ struct Animal {
    char const* name;
    PTRFUN* fn_ptr_table;
 };
+struct Dog {
+   char const* name;
+   PTRFUN* fn_ptr_table;
+};
+struct Cat {
+   char const* name;
+   PTRFUN* fn_ptr_table;
+};
 
 void animalPrintGreeting(struct Animal* animal){
    printf("%s pozdravlja: %s\n", animal->name, animal->fn_ptr_table[0]());
@@ -34,35 +42,42 @@ void animalPrintMenu(struct Animal* animal){
    return;
 }
 
-struct Animal* ConstructCat(struct Animal* animal, char const* name){
-   animal->name = name;
-   animal->fn_ptr_table = cat_fn_ptr_table;
-   return animal;
+struct Animal* constructAnimal(struct Animal *animal, char const *name){
+  animal->name = name;
+  return animal;
 }
 
-struct Animal* ConstructDog(struct Animal* animal, char const* name){
-   animal->name = name;
-   animal->fn_ptr_table = dog_fn_ptr_table;
-   return animal;
+struct Cat* constructCat(struct Cat* cat, char const* name){
+   constructAnimal((struct Animal*) cat, name);
+   cat->fn_ptr_table = cat_fn_ptr_table;
+   return cat;
 }
 
-struct Animal* createDog(char const* name){
-   struct Animal *animal = (struct Animal*) malloc(sizeof(struct Animal));
-   return ConstructDog(animal,name);
+struct Dog* constructDog(struct Dog* dog, char const* name){
+   constructAnimal((struct Animal*) dog, name);
+   dog->fn_ptr_table = dog_fn_ptr_table;
+   return dog;
+}
+
+struct Animal* createDog(char const*name){
+  struct Dog *dog = (struct Dog*) malloc(sizeof(struct Dog));
+  constructDog(dog, name);
+  return (struct Animal*) dog;
 }
 
 struct Animal* createCat(char const* name){
-   struct Animal *animal = (struct Animal*) malloc(sizeof(struct Animal));
-   return ConstructCat(animal,name);
+   struct Cat *cat = (struct Cat*) malloc(sizeof(struct Cat));
+   constructCat(cat,name);
+   return (struct Animal*)  cat;
 }
 
-struct Animal** createNdogs(const char** names[], int n){
-   struct Animal** dogs = (struct Animal**) malloc(n * sizeof(struct Animal*));
-   for(int i = 0; i < n; i++){
-      dogs[i] = createDog(names[i]);
-   }
-   return dogs;
-};
+struct Animal** createNdogs(const char** names, int n){
+    struct Animal** dogs = (struct Animal**) malloc(n * sizeof(struct Dog*));
+    for(int i = 0; i < n; i++){
+        dogs[i] = createDog(names[i]);
+    }
+    return dogs;
+}
 
 
 //   Hamlet pozdravlja: vau!
@@ -88,7 +103,7 @@ void testAnimals(void){
   free(p1); free(p2); free(p3);
 
   struct Animal stackDog;
-  ConstructDog(&stackDog, "Laertes");
+  constructDog((struct Dog*) &stackDog, "Laertes");
   animalPrintGreeting(&stackDog);
   animalPrintMenu(&stackDog);
 
