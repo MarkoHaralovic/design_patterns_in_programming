@@ -106,10 +106,10 @@ int main()
 {
     Unary_Function *f1, *f2;
 
-    f1 = (Unary_Function *) createSquare(-2, 2);
+    f1 = (struct Unary_Function *) createSquare(-2, 2);
     tabulate(f1);
 
-    f2 = (Unary_Function *) createLinear(-2, 2, 5, -2);
+    f2 = (struct Unary_Function *) createLinear(-2, 2, 5, -2);
     tabulate(f2);
 
     printf("f1==f2: %s\n", same_functions_for_ints(f1, f2, 1E-6) ? "DA" : "NE");
