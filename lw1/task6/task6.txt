@@ -1,0 +1,108 @@
+Ispis je programa:
+
+       Metoda kaze: ja sam bazna implementacija!
+       Metoda kaze: ja sam izvedena implementacija!
+       Metoda kaze: ja sam izvedena implementacija!
+      
+Prvi ispis je u konstruktoru bazne klase,kad ase poziva metoda 
+"metoda", koja poziva metodu virtualnaMetoda.
+
+Drugi je ispis u konstruktoru izvedene klase, u konstruktoru,
+kada se poziva metoda "metoda", koja poziva metodu izvedene 
+klase virtualnaMetoda.
+
+Treći je ispis jednak prethodnom, jer se poziva metoda "metoda"
+i virtualnaMetoda izvedene klase (Derived).
+
+PITANJA: Objasnite ispis programa analizirajući prevedeni strojni kod. Obratite pažnju na to tko, kada i gdje postavlja/modificira pokazivač na tablicu virtualnih funkcija.
+
+ODGOVORI:
+Na liniji 178 poziva se konstruktor klase Derived.Linija:
+   call	_Derived::Derived()
+
+To objašnjava prvi ispis: prilikom kreiranja izvedene kalse, kako se u konstruktoru bazne klase poziva metoda metoda(),
+ona poziva virtualnu funkciju u baznoj klasi.
+Drugi ispis je objašnjen time što je u konstruktoru izvedene klase poziv metode 
+metoda(), koja u izvedenoj klasi poziva njegovu inačicu virtualne metode virtualnaMetoda().
+
+U liniji 23 u klasi Base:
+   call	_Base::metoda()
+prilikom stvaranja baznog objekta, poziva se metoda, te se u linijama 
+   	mov	eax, DWORD PTR [eax]
+      mov	eax, DWORD PTR [eax]
+      mov	edx, DWORD PTR [ebp-12]
+      mov	ecx, edx
+      call	eax
+izvodi poziv i ispisuje " Metoda kaze: ja sam bazna implementacija!".
+
+Nakon toga na liniji 184, poziva se metoda metoda() bazne klase. Linija:
+   call	_Base::metoda()
+
+Ta linija odgovara liniji u c++ kodu u main funkciji: pd->metoda();
+
+jer se metoda() u baznoj klasi ne nadjačava u izvedenoj klasi (jer nije virtualna),
+ali je virtualna motda nadjačana pa je pozvana virtualnaMetoda() definirana u izvedenoj klasi.
+
+GDJE SE POSTAVLJAJU POKAZIVAČI NA TABLICU VIRTUALNIH FUNKCIJA
+Linije 18 i 109:
+	mov	edx, OFFSET FLAT:_vtable for Derived 8
+   mov	edx, OFFSET FLAT:_vtable for Base 8
+
+su zaslužne za postavljanje tablica virtualnih funkcija, u konstruktorima klasa
+Base i Derived.
+
+TKO IH POSTAVLJA:
+Kompajler po generiranom kodu konstruktora klasa.
+
+KADA:
+Prilikom stvaranja Bazne klase ili bilo koje izvedene klase.Isto vrijedi i za izvedenu klasu Derived.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Program Output:
+
+   "The method says: I am the base implementation!"
+   "The method says: I am the derived implementation!"
+   "The method says: I am the derived implementation!"
+Explanation:
+
+The first printout is in the constructor of the base class, when the method "metoda", which calls the method virtualnaMetoda, is invoked.
+The second printout is in the constructor of the derived class, in the constructor, when the method "metoda", which calls the method of the derived class virtualnaMetoda, is invoked.
+The third printout is the same as the previous one because the method "metoda" and virtualnaMetoda of the derived class (Derived) are called.
+Questions: Explain the program output by analyzing the translated machine code. Pay attention to who, when, and where sets/modifies the pointer to the table of virtual functions.
+
+Answers:
+On line 178, the constructor of the Derived class is called. Line:
+         call _Derived::Derived()
+
+This explains the first printout: during the creation of the derived class, as the method metoda() is called in the constructor of the base class, it calls the virtual function in the base class.
+The second printout is explained by the fact that in the constructor of the derived class, the call of the method metoda(), which in the derived class calls its version of the virtual method virtualnaMetoda().
+
+In line 23 in the Base class:
+      call _Base::metoda()
+      during the creation of the base object, the method is called, and in lines
+      mov eax, DWORD PTR [eax]
+      mov eax, DWORD PTR [eax]
+      mov edx, DWORD PTR [ebp-12]
+      mov ecx, edx
+      call eax
+executes the call and prints "The method says: I am the base implementation!".
+
+Then on line 184, the metoda() method of the base class is called. Line:
+      call _Base::metoda()
+
+This line corresponds to the line in the C++ code in the main function: pd->metoda();
+
+since the method() in the base class is not overridden in the derived class (because it is not virtual), but the virtual method is overridden so the virtualnaMetoda() defined in the derived class is called.
+
+Where the Pointers to the Virtual Function Table are Set:
+
+Lines 18 and 109:
+      mov edx, OFFSET FLAT:_vtable for Derived 8
+      mov edx, OFFSET FLAT:_vtable for Base 8
+
+are responsible for setting the tables of virtual functions, in the constructors of the Base and Derived classes.
+
+Who Sets Them:
+      The compiler according to the generated code of the class constructors.
+
+When:
+      During the creation of the Base class or any derived class. The same applies to the derived class Derived.
