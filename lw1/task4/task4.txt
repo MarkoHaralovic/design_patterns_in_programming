@@ -1,7 +1,85 @@
 ODGOVORI NA PITANJA
 1.Pronađite dijelove assemblerskog kôda u kojima se odvija alociranje memorije za objekte poc i *pb.
+
+Memorija za objekt poc (razred PlainOldClass) alocirana je u liniji 143 strojnog koda, odnosno u liniji 
+      push	DWORD PTR [ecx-4]
+Memorija za *pb (razred CoolClass) alocirana je u linijama 154 i 157, odnosno u linijama :
+      call	__Znwj
+      call	__ZN9CoolClassC1Ev
+
 2. Objasnite razliku u načinu alociranja tih objekata.
+Objekt poc alociran je na stogu, dok je memorija za *pb dinamički alocirana na hrpi.
+Za poc se alokacija i dealokacija memorije prepušta kompajleru, dok se za pb dinamički alocira memorija pohrane. Kreirnje tog objekta je 
+pozivom new i briše se korištenjem riječi delete.
+
 3. Pronađite dio assemblerskog kôda koji je zadužen za poziv konstruktora objekta poc, ako takav poziv postoji.
+Takav poziv ne postoji jer se memeorija alocira direktno na stogu, bez eksplicitnog poziva konstruktora.
+
 4. Pronađite dio assemblerskog kôda koji je zadužen za poziv konstruktora objekta *pb. Razmotrite kako se točno izvršava taj kôd. Što se u njemu događa?
+Objekt se kreira u liniji 157 : call	__ZN9CoolClassC1Ev.
+Konstruktor klase je vidljiv na linijama 110 do 131. U konstruktoru se alocira memorija za lokalne varijable. U konstruktoru CoolClass klase 
+poziva se konstruktor bazne klase Base(koristeći this pointer na objekt klase CoolClass), dohvaćaju se adrese virtualnih tablica. Konstruktor
+bazne klase Base ima isto zauzeće memorijeza virtualne tablice i this pointer.
+
 5. Promotrite kako je prevoditelj izveo pozive pb->set i poc.set. Objasnite razliku između izvedbi tih dvaju poziva. Koji od ta dva poziva zahtijeva manje instrukcija? Za koju od te dvije izvedbe bi optimirajući prevoditelj mogao generirati kôd bez instrukcije CALL odnosno izravno umetnuti implementaciju funkcije (eng. inlining)?
+poc.set je izveden u liniji 162 : call	__ZN13PlainOldClass3setEi.
+pb->set je izveden u liniji 170: call	edx
+
+Razlika u pozivima je sljedeća: poc.set poziv se izvodi izravno na objektu u memoriji, dok se pb->set izvodi pristupom virtualnim funkcijama 
+objeketa koji se nalazi na stogu.
+
+Za pozivanje poc.set metode potrebno je manje instrukcija u odnosu na poziv pb->set.
+
+Optimirajući prevoditelj  bi mogao promijeniti poziv funkcije poc.set na način da se "call", odnosno poziv te funkcije zamijeni s tijelom same 
+funkcije (ukoliko se želi uštedjeti na memoriju zbog spremanja funkcijskih poziva,primjerice zbog čestih i velikobrojnih funkcijskih poziva).
+
 6. Pronađite asemblerski kôd za definiciju i inicijalizaciju tablice virtualnih funkcija razreda CoolClass.
+Konstruktor CoolClass klase  postavlja pointer na tablicu vladtitih virtualnih tablica.Na linijama 186 do 194 se definiraju virtualne tablice za klasu CoolClass:
+   .globl _vtable for CoolClass
+   .section .rdata$vtable for CoolClass,"dr"
+   .linkonce same_size
+   .align 4
+   _vtable for CoolClass:
+      .long 0
+      .long _typeinfo for CoolClass
+      .long _CoolClass::set(int)
+      .long _CoolClass::get()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ANSWERS
+1. **Find the parts of the assembly code where memory allocation for objects `poc` and `*pb` occurs.**
+   - Memory for the object `poc` (class `PlainOldClass`) is allocated in line 143 of the machine code, namely in the line `push DWORD PTR [ecx-4]`.
+   - Memory for `*pb` (class `CoolClass`) is allocated in lines 154 and 157, namely in the lines: `call __Znwj` and `call __ZN9CoolClassC1Ev`.
+
+2. **Explain the difference in the way these objects are allocated.**
+   - The `poc` object is allocated on the stack, while memory for `*pb` is dynamically allocated on the heap.
+   - For `poc`, memory allocation and deallocation are handled by the compiler, whereas for `pb`, storage memory is dynamically allocated. This object is created with a `new` call and is deleted using the `delete` keyword.
+
+3. **Find the part of the assembly code responsible for calling the constructor of the `poc` object, if such a call exists.**
+   - Such a call does not exist because the memory is allocated directly on the stack without an explicit call to the constructor.
+
+4. **Find the part of the assembly code responsible for calling the constructor of the `*pb` object. Consider how exactly this code is executed. What happens in it?**
+   - The object is created in line 157: `call __ZN9CoolClassC1Ev`.
+   - The constructor of the class is visible in lines 110 to 131. In the constructor, memory is allocated for local variables. In the `CoolClass` constructor, the constructor of the base class `Base` is called (using the `this` pointer to the `CoolClass` object), and addresses of virtual tables are retrieved. The `Base` class constructor also sets aside memory for virtual tables and the `this` pointer.
+
+5. **Observe how the compiler executed the calls `pb->set` and `poc.set`. Explain the difference between the implementations of these two calls. Which of these two calls requires fewer instructions? For which of these two implementations could an optimizing compiler generate code without a CALL instruction, i.e., directly insert the function implementation (inlining)?**
+   - `poc.set` is executed in line 162: `call __ZN13PlainOldClass3setEi`.
+   - `pb->set` is executed in line 170: `call edx`.
+
+   The difference in the calls is as follows: `poc.set` is executed directly on the object in memory, while `pb->set` is executed by accessing virtual functions of the object on the stack.
+
+   Calling the `poc.set` method requires fewer instructions compared to calling `pb->set`.
+
+   An optimizing compiler could modify the `poc.set` function call such that the "call", or the function call, is replaced with the body of the function itself (if saving memory due to storing function calls is desired, for example, due to frequent and numerous function calls).
+
+6. **Find the assembly code for the definition and initialization of the virtual function table of the `CoolClass` class.**
+   - The `CoolClass` constructor sets a pointer to its own virtual function table. On lines 186 to 194, the virtual tables for the `CoolClass` class are defined:
+     - `.globl _vtable for CoolClass`
+     - `.section .rdata$vtable for CoolClass,"dr"`
+     - `.linkonce same_size`
+     - `.align 4`
+     - `_vtable for CoolClass:` 
+         - `.long 0`
+         - `.long _typeinfo for CoolClass`
+         - `.long _CoolClass::set(int)`
+         - `.long _CoolClass::get()`
