@@ -55,7 +55,8 @@ TKO IH POSTAVLJA:
 Kompajler po generiranom kodu konstruktora klasa.
 
 KADA:
-Prilikom stvaranja Bazne klase ili bilo koje izvedene klase.Isto vrijedi i za izvedenu klasu Derived.
+Prilikom stvaranja Bazne klase ili bilo koje izvedene klase.Isto vrijedi i za izvedenu klasu Derived. 
+Pokazivač na tablicu virtualnih funkcija u izvedenoj klasi modificira pokazivač bazne klase na tablicu virtualnih funkcija.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Program Output:
 
