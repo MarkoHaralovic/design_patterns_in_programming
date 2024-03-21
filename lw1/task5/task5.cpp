@@ -2,14 +2,14 @@
 
 class B{
 public:
-  virtual int prva()=0;
-  virtual int druga(int)=0;
+  virtual int __cdecl prva()=0;
+  virtual int __cdecl druga(int)=0;
 };
 
 class D: public B{
 public:
-  virtual int prva(){return 42;}
-  virtual int druga(int x){return prva()+x;}
+  virtual int __cdecl prva(){return 42;}
+  virtual int __cdecl druga(int x){return prva()+x;}
 };
 
 void print_values(B* pb, int x) {
@@ -19,10 +19,10 @@ void print_values(B* pb, int x) {
 
     std::cout << "prva: " << pfun_prva() << std::endl;
 
-   //  int(*pfun_druga)(int);
-   //  pfun_druga= (int(*)(int)) (vtable[0]+4);
+    int(*pfun_druga)(B*,int);
+    pfun_druga= (int(*)(B*,int)) vtable[1];
 
-   //  std::cout << "druga: " << pfun_druga(x) << std::endl;
+    std::cout << "druga: " << pfun_druga(pb,x) << std::endl;
 }
 
 
