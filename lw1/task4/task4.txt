@@ -1,0 +1,7 @@
+ODGOVORI NA PITANJA
+1.Pronađite dijelove assemblerskog kôda u kojima se odvija alociranje memorije za objekte poc i *pb.
+2. Objasnite razliku u načinu alociranja tih objekata.
+3. Pronađite dio assemblerskog kôda koji je zadužen za poziv konstruktora objekta poc, ako takav poziv postoji.
+4. Pronađite dio assemblerskog kôda koji je zadužen za poziv konstruktora objekta *pb. Razmotrite kako se točno izvršava taj kôd. Što se u njemu događa?
+5. Promotrite kako je prevoditelj izveo pozive pb->set i poc.set. Objasnite razliku između izvedbi tih dvaju poziva. Koji od ta dva poziva zahtijeva manje instrukcija? Za koju od te dvije izvedbe bi optimirajući prevoditelj mogao generirati kôd bez instrukcije CALL odnosno izravno umetnuti implementaciju funkcije (eng. inlining)?
+6. Pronađite asemblerski kôd za definiciju i inicijalizaciju tablice virtualnih funkcija razreda CoolClass.
