@@ -20,28 +20,28 @@ ODGOVORI:
 Na liniji 178 poziva se konstruktor klase Derived.Linija:
    call	_Derived::Derived()
 
-To objašnjava prvi ispis: prilikom kreiranja izvedene kalse, kako se u konstruktoru bazne klase poziva metoda metoda(),
+To objašnjava prvi ispis: prilikom kreiranja izvedene klase, kako se u konstruktoru bazne klase poziva metoda metoda(),
 ona poziva virtualnu funkciju u baznoj klasi.
-Drugi ispis je objašnjen time što je u konstruktoru izvedene klase poziv metode 
-metoda(), koja u izvedenoj klasi poziva njegovu inačicu virtualne metode virtualnaMetoda().
 
 U liniji 23 u klasi Base:
    call	_Base::metoda()
-prilikom stvaranja baznog objekta, poziva se metoda, te se u linijama 
-   	mov	eax, DWORD PTR [eax]
-      mov	eax, DWORD PTR [eax]
-      mov	edx, DWORD PTR [ebp-12]
-      mov	ecx, edx
-      call	eax
-izvodi poziv i ispisuje " Metoda kaze: ja sam bazna implementacija!".
+prilikom stvaranja baznog objekta, poziva se metoda, te se u liniji:
+   call	_Base::metoda()
+izvodi poziv metode metoda() i ispisuje " Metoda kaze: ja sam bazna implementacija!".
+
+Drugi ispis je objašnjen time što je u konstruktoru izvedene klase poziv metode 
+metoda(), koja u izvedenoj klasi poziva njegovu inačicu virtualne metode virtualnaMetoda().
+U liniji 114:
+      	call	_Base::metoda()
+poziva se metoda metoda() i poziva se virtualnaMetoda() izvedene kalse i to objašnjava drugi ispis.
 
 Nakon toga na liniji 184, poziva se metoda metoda() bazne klase. Linija:
    call	_Base::metoda()
 
 Ta linija odgovara liniji u c++ kodu u main funkciji: pd->metoda();
 
-jer se metoda() u baznoj klasi ne nadjačava u izvedenoj klasi (jer nije virtualna),
-ali je virtualna motda nadjačana pa je pozvana virtualnaMetoda() definirana u izvedenoj klasi.
+jer se metoda  metoda() u baznoj klasi ne nadjačava u izvedenoj klasi (jer nije virtualna),
+ali je virtualna metoda nadjačana pa je pozvana virtualnaMetoda() definirana u izvedenoj klasi.
 
 GDJE SE POSTAVLJAJU POKAZIVAČI NA TABLICU VIRTUALNIH FUNKCIJA
 Linije 18 i 109:
