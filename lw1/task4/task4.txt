@@ -18,8 +18,8 @@ Takav poziv ne postoji jer se memeorija alocira direktno na stogu, bez eksplicit
 4. Pronađite dio assemblerskog kôda koji je zadužen za poziv konstruktora objekta *pb. Razmotrite kako se točno izvršava taj kôd. Što se u njemu događa?
 Objekt se kreira u liniji 157 : call	__ZN9CoolClassC1Ev.
 Konstruktor klase je vidljiv na linijama 110 do 131. U konstruktoru se alocira memorija za lokalne varijable. U konstruktoru CoolClass klase 
-poziva se konstruktor bazne klase Base(koristeći this pointer na objekt klase CoolClass), dohvaćaju se adrese virtualnih tablica. Konstruktor
-bazne klase Base ima isto zauzeće memorijeza virtualne tablice i this pointer.
+poziva se konstruktor bazne klase Base(koristeći this pointer na objekt klase CoolClass), dohvaća se adresa virtualnih tablica. Konstruktor
+bazne klase Base ima isto zauzeće memorije za pokazivače na virtualnu tablicu i this pointer.
 
 5. Promotrite kako je prevoditelj izveo pozive pb->set i poc.set. Objasnite razliku između izvedbi tih dvaju poziva. Koji od ta dva poziva zahtijeva manje instrukcija? Za koju od te dvije izvedbe bi optimirajući prevoditelj mogao generirati kôd bez instrukcije CALL odnosno izravno umetnuti implementaciju funkcije (eng. inlining)?
 poc.set je izveden u liniji 162 : call	__ZN13PlainOldClass3setEi.
@@ -34,7 +34,7 @@ Optimirajući prevoditelj  bi mogao promijeniti poziv funkcije poc.set na način
 funkcije (ukoliko se želi uštedjeti na memoriju zbog spremanja funkcijskih poziva,primjerice zbog čestih i velikobrojnih funkcijskih poziva).
 
 6. Pronađite asemblerski kôd za definiciju i inicijalizaciju tablice virtualnih funkcija razreda CoolClass.
-Konstruktor CoolClass klase  postavlja pointer na tablicu vladtitih virtualnih tablica.Na linijama 186 do 194 se definiraju virtualne tablice za klasu CoolClass:
+Konstruktor CoolClass klase  postavlja pointer na tablicu vlastitih virtualnih tfunkcija.Na linijama 186 do 194 se definira i inicijalizira tablica virtualnih funkcija za klasu CoolClass:
    .globl _vtable for CoolClass
    .section .rdata$vtable for CoolClass,"dr"
    .linkonce same_size
@@ -60,7 +60,7 @@ ANSWERS
 
 4. **Find the part of the assembly code responsible for calling the constructor of the `*pb` object. Consider how exactly this code is executed. What happens in it?**
    - The object is created in line 157: `call __ZN9CoolClassC1Ev`.
-   - The constructor of the class is visible in lines 110 to 131. In the constructor, memory is allocated for local variables. In the `CoolClass` constructor, the constructor of the base class `Base` is called (using the `this` pointer to the `CoolClass` object), and addresses of virtual tables are retrieved. The `Base` class constructor also sets aside memory for virtual tables and the `this` pointer.
+   - The constructor of the class is visible in lines 110 to 131. In the constructor, memory is allocated for local variables. In the `CoolClass` constructor, the constructor of the base class `Base` is called (using the `this` pointer to the `CoolClass` object), and address of table of virtual functions is  retrieved. The `Base` class constructor also sets aside memory for virtual tables and the `this` pointer.
 
 5. **Observe how the compiler executed the calls `pb->set` and `poc.set`. Explain the difference between the implementations of these two calls. Which of these two calls requires fewer instructions? For which of these two implementations could an optimizing compiler generate code without a CALL instruction, i.e., directly insert the function implementation (inlining)?**
    - `poc.set` is executed in line 162: `call __ZN13PlainOldClass3setEi`.
@@ -73,7 +73,7 @@ ANSWERS
    An optimizing compiler could modify the `poc.set` function call such that the "call", or the function call, is replaced with the body of the function itself (if saving memory due to storing function calls is desired, for example, due to frequent and numerous function calls).
 
 6. **Find the assembly code for the definition and initialization of the virtual function table of the `CoolClass` class.**
-   - The `CoolClass` constructor sets a pointer to its own virtual function table. On lines 186 to 194, the virtual tables for the `CoolClass` class are defined:
+   - The `CoolClass` constructor sets a pointer to its own virtual function table. On lines 186 to 194, the tabel fo virtual functions for the `CoolClass` class is defined:
      - `.globl _vtable for CoolClass`
      - `.section .rdata$vtable for CoolClass,"dr"`
      - `.linkonce same_size`
