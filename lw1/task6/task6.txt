@@ -4,7 +4,7 @@ Ispis je programa:
        Metoda kaze: ja sam izvedena implementacija!
        Metoda kaze: ja sam izvedena implementacija!
       
-Prvi ispis je u konstruktoru bazne klase,kad ase poziva metoda 
+Prvi ispis je u konstruktoru bazne klase,kada se poziva metoda 
 "metoda", koja poziva metodu virtualnaMetoda.
 
 Drugi je ispis u konstruktoru izvedene klase, u konstruktoru,
