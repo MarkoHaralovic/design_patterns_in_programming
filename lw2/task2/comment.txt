@@ -1,0 +1,14 @@
+U drugom zadatku sam napravio predložak koji je značanije olakšao proširenje na više vrsta struktora podataka i tipove parametrizacije.
+Olakšano je to što ne trebamo sami voditi računa o konverzijama tipova, odnosno važno je kako strukture podataka s kojima radimo
+imaju svojstvo iterabilnosti. 
+C koristi void pokazivače i funkcije obrađuju te pokazivače, što ostavlja svakome tko implementira kod da eksplicitno
+obavi konverziju tipova. Taj dio otežava i proširuje programerski posao, ali je i šira primjena, kako void pokazivač može 
+na adresi na koju pokazuje imati bilo koji tip podatka.
+----------------------------------------------------------------------------------------------------------------------------------------
+In the second task, I created a template that significantly facilitated the extension to various data structures 
+and parameter types. It is made easier because we do not have to manually manage type conversions; importantly,
+ the data structures we work with possess the property of iterability. C uses void pointers and functions that 
+ process these pointers, leaving it up to the implementer to explicitly perform type conversions. 
+ 
+This aspect complicates and extends the programming task, but it also offers a wider application, 
+as a void pointer can point to any data type at its address.
