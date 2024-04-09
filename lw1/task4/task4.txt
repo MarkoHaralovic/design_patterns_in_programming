@@ -9,7 +9,7 @@ Memorija za *pb (razred CoolClass) alocirana je u linijama 154 i 157, odnosno u 
 
 2. Objasnite razliku u načinu alociranja tih objekata.
 Objekt poc alociran je na stogu, dok je memorija za *pb dinamički alocirana na hrpi.
-Za poc se alokacija i dealokacija memorije prepušta kompajleru, dok se za pb dinamički alocira memorija pohrane. Kreirnje tog objekta je 
+Za poc se alokacija i dealokacija memorije prepušta kompajleru, dok se za pb dinamički alocira memorija pohrane. Kreiranje tog objekta je 
 pozivom new i briše se korištenjem riječi delete.
 
 3. Pronađite dio assemblerskog kôda koji je zadužen za poziv konstruktora objekta poc, ako takav poziv postoji.
