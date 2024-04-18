@@ -8,6 +8,7 @@ def fibo(n):
         nums.append(a)
         a, b = b, a + b
     return nums 
+ 
 class NumberGenerationStrategy(ABC):
    @abstractmethod
    def generate_numbers(self,*args,**kwargs):
@@ -18,17 +19,6 @@ class pPercentileCalculationStrategy(ABC):
    def find_pth_percentile(self,numbers,percentile):
       return 
 
-class DistributionTester():
-   def __init__(self,generating_strategy , p_percentile_calculation):
-      self._generating_strategy = generating_strategy 
-      self._p_percentile_calculation = p_percentile_calculation
-   def test_number_distribution(self,*args,**kwargs):
-      numbers = self._generating_strategy.generate_numbers(*args,**kwargs)
-      numbers.sort()
-      print(f"Numbers : {numbers}")
-      for p in range (10,100,10):
-         print(f"Numbers {p}th percentile : {self._p_percentile_calculation.find_pth_percentile(numbers,p)}")
-   
 class SequentialNumberGenerationStrategy(NumberGenerationStrategy):
    def generate_numbers(self,lower_bound,upper_bound,step):
       return [x for x in range(lower_bound, upper_bound + 1, step)]
@@ -55,6 +45,18 @@ class NearestRankMethod(pPercentileCalculationStrategy):
    def find_pth_percentile(self, numbers, percentile):
       return numbers[int(percentile * len(numbers) / 100 +0.5)]
 
+class DistributionTester():
+   def __init__(self,generating_strategy , p_percentile_calculation):
+      self._generating_strategy = generating_strategy 
+      self._p_percentile_calculation = p_percentile_calculation
+   def test_number_distribution(self,*args,**kwargs):
+      numbers = self._generating_strategy.generate_numbers(*args,**kwargs)
+      numbers.sort()
+      print(f"Numbers : {numbers}")
+      for p in range (10,100,10):
+         print(f"Numbers {p}th percentile : {self._p_percentile_calculation.find_pth_percentile(numbers,p)}")
+   
+   
 def main():
    
    sequential_numbers_linear_interpolation = DistributionTester(SequentialNumberGenerationStrategy(),LinearInterpolation())

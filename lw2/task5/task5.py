@@ -12,7 +12,13 @@ class IzvorBrojeva(ABC):
    @abstractmethod
    def citaj_brojeve(self):
       pass
-
+   
+class Observer(ABC):
+   @abstractmethod
+   def on_change(self,*args,**kwargs):
+      pass
+      
+      
 class SlijedBrojeva():
    def __init__(self,stream,observers):
       self._number_collection = []
@@ -68,15 +74,15 @@ class LogData:
          for element in data:
             file.write(f"{element} - {datetime.now()}\n")
 
-class DataSum:
+class DataSum(Observer):
    def on_change(self,data):
       print(f"Trenutna suma brojeva jest : {np.sum(data)}")
       
-class DataMedian:
+class DataMedian(Observer):
    def on_change(self,data):
       print(f"Trenutni medijan brojeva jest : {np.median(data)}")
 
-class DataAverage:
+class DataAverage(Observer):
    def on_change(self,data):
       print(f"Trenutni prosjek brojeva jest : {np.average(data)}")
       
