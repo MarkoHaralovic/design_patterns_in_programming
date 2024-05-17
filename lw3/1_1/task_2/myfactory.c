@@ -35,9 +35,6 @@ void* myfactory(char const* libname, char const* ctorarg, void* buffer){
             return NULL;
         }
     } else {
-      if ((size_t)buffer < size){
-         return NULL;
-      }
         memory = buffer;
     }
 
