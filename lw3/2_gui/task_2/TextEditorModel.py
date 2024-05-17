@@ -252,22 +252,24 @@ class TextEditorModel:
    #      self.insert_text(c)
         
    def insert_string(self, text):
-      if self.selectionRange.start != self.selectionRange.end:
-         self.deleteRange(self.selectionRange)
-      lines_to_insert = text.split('\n')
-      line, col = self.cursorLocation.line, self.cursorLocation.column
-      current_line = self.lines[line]
-      if len(lines_to_insert) == 1:
-         new_line = current_line[:col] + lines_to_insert[0] + current_line[col:]
-         self.lines[line] = new_line
-         self.updateCursorLocation(line, col + len(lines_to_insert[0]))
-      else:
-         self.lines[line] = current_line[:col] + lines_to_insert[0]
-         for i, insert_line in enumerate(lines_to_insert[1:], start=1):
-               self.lines.insert(line + i, insert_line)
-         self.lines[line + len(lines_to_insert) - 1] += current_line[col:]
-         self.updateCursorLocation(line + len(lines_to_insert) - 1, len(lines_to_insert[-1]))
-      self.notifyTextObservers()
+        if self.selectionRange.start != self.selectionRange.end:
+            self.deleteRange(self.selectionRange)
+        lines_to_insert = text.split('\n')
+        line, col = self.cursorLocation.line, self.cursorLocation.column
+        current_line = self.lines[line]
+        if len(lines_to_insert) == 1:
+            new_line = current_line[:col] + lines_to_insert[0] + current_line[col:]
+            self.lines[line] = new_line
+            self.updateCursorLocation(line, col + len(lines_to_insert[0]))
+        else:
+            self.lines[line] = current_line[:col] + lines_to_insert[0]
+            for i, insert_line in enumerate(lines_to_insert[1:], start=1):
+                self.lines.insert(line + i, insert_line)
+            self.lines[line + len(lines_to_insert) - 1] += current_line[col:]
+            self.updateCursorLocation(line + len(lines_to_insert) - 1, len(lines_to_insert[-1]))
+        insert_action = InsertAction(self, Location(line, col), text)
+        self.undo_manager.push(insert_action)
+        self.notifyTextObservers()
    
    def getSelectedText(self):
         start = self.selectionRange.start
@@ -284,15 +286,16 @@ class TextEditorModel:
          
    def _insert_text(self, location, text):
         line, col = location.line, location.column
+        if line >= len(self.lines):
+            self.lines.extend([''] * (line - len(self.lines) + 1))  # Ensure the line exists
+        current_line = self.lines[line]
         if text == '\r':  
-            current_line = self.lines[line]
             first_part = current_line[:col]
             second_part = current_line[col:]
             self.lines[line] = first_part
             self.lines.insert(line + 1, second_part)
             self.updateCursorLocation(line + 1, 0)
         else:
-            current_line = self.lines[line]
             new_line = current_line[:col] + text + current_line[col:]
             self.lines[line] = new_line
             self.updateCursorLocation(line, col + len(text))
