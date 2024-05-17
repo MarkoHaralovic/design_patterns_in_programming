@@ -5,13 +5,6 @@
 
 typedef char const* (*PTRFUN)();
 
-// struct Animal{
-//   PTRFUN* vtable;
-//   // vtable entries:
-//   // 0: char const* name(void* this);
-//   // 1: char const* greet();
-//   // 2: char const* menu();
-// };
 struct Animal {
    char const* name;
    PTRFUN* fn_ptr_table;
@@ -21,12 +14,12 @@ struct Animal {
 
 // animalPrintGreeting and animalPrintMenu similar as in lab 1
 void animalPrintGreeting(struct Animal* animal){
-   printf("%s pozdravlja: %s\n", animal->name, animal->fn_ptr_table[1]());
+   printf("%s pozdravlja: %s\n", animal->fn_ptr_table[0](animal), animal->fn_ptr_table[1]());
    return;
 }
 
 void animalPrintMenu(struct Animal* animal){
-   printf("%s voli: %s\n", animal->name, animal->fn_ptr_table[2]());
+   printf("%s voli: %s\n", animal->fn_ptr_table[0](animal), animal->fn_ptr_table[2]());
    return;
 }
 
