@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "myfactory.h"
+#include <stdio.h>
 
 void* myfactory(char const* libname, char const* ctorarg, void* buffer){
 
