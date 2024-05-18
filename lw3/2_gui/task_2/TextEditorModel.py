@@ -192,10 +192,7 @@ class TextEditorModel:
             self.lines[self.cursorLocation.line] += self.lines[self.cursorLocation.line + 1]
             del self.lines[self.cursorLocation.line + 1]
         self.notifyTextObservers()
-        
-   # def deleteAfter(self):
-   #      self.forward_delete()  # Assuming forward_delete handles single character deletion
-   #      self.notifyTextObservers()
+
    def deleteAfter(self):
         line, col = self.cursorLocation.line, self.cursorLocation.column
         if col < len(self.lines[line]):
@@ -248,9 +245,7 @@ class TextEditorModel:
       self.lines[line] = new_line
       self.updateCursorLocation(line, col + 1)
       self.notifyTextObservers()
-   # def insert_char(self, c):
-   #      self.insert_text(c)
-        
+ 
    def insert_string(self, text):
         if self.selectionRange.start != self.selectionRange.end:
             self.deleteRange(self.selectionRange)
@@ -287,7 +282,7 @@ class TextEditorModel:
    def _insert_text(self, location, text):
         line, col = location.line, location.column
         if line >= len(self.lines):
-            self.lines.extend([''] * (line - len(self.lines) + 1))  # Ensure the line exists
+            self.lines.extend([''] * (line - len(self.lines) + 1))
         current_line = self.lines[line]
         if text == '\r':  
             first_part = current_line[:col]
