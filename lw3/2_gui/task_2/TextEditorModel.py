@@ -79,26 +79,6 @@ class TextEditorModel:
         self.undo_manager.push(insert_action)
         insert_action.execute_do()
         self.notifyTextObservers()
-   # def insert_text(self, text):
-   #      if self.selectionRange.start != self.selectionRange.end:
-   #          self.deleteRange(self.selectionRange)
-   #      line, col = self.cursorLocation.line, self.cursorLocation.column
-   #      if text == '\r':  # Handling Return key as new line
-   #          # Split current line into two at cursor position
-   #          current_line = self.lines[line]
-   #          first_part = current_line[:col]
-   #          second_part = current_line[col:]
-   #          self.lines[line] = first_part
-   #          self.lines.insert(line + 1, second_part)
-   #          # Move cursor to the start of the next line
-   #          self.updateCursorLocation(line + 1, 0)
-   #      else:
-   #          current_line = self.lines[line]
-   #          new_line = current_line[:col] + text + current_line[col:]
-   #          self.lines[line] = new_line
-   #          # Update cursor location after insert
-   #          self.updateCursorLocation(line, col + len(text))
-   #      self.notifyTextObservers()
 
    def delete_text(self):
       line, col = self.cursorLocation.line, self.cursorLocation.column
