@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
-from .Point import Point
-from .GraphicalObject import GraphicalObject
-from .GraphicalObjectListener import GraphicalObjectListener
+from Point import Point
+from GraphicalObject import GraphicalObject
+from GraphicalObjectListener import GraphicalObjectListener
 
 class AbstractGraphicalObject(GraphicalObject):
     def __init__(self, hotPoints: List[Point], hotPointSelected: List[bool], selected: bool, listeners: List[GraphicalObjectListener]):

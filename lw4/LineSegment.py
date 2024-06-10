@@ -1,8 +1,9 @@
-from .AbstractGraphicalObject import AbstractGraphicalObject
-from .Point import Point
-from .GeometryUtil import GeometryUtil
-from .Rectangle import Rectangle
-from .GraphicalObject import GraphicalObject
+from Renderer import Renderer
+from AbstractGraphicalObject import AbstractGraphicalObject
+from Point import Point
+from GeometryUtil import GeometryUtil
+from Rectangle import Rectangle
+from GraphicalObject import GraphicalObject
 
 class LineSegment(AbstractGraphicalObject):
    def __init__(self, start_point: Point = None, end_point: Point = None):
@@ -28,3 +29,6 @@ class LineSegment(AbstractGraphicalObject):
    
    def duplicate(self) -> 'GraphicalObject':
       return LineSegment(self.start_point,self.end_point)
+   
+   def render(self, renderer: Renderer) -> None:
+       return renderer.draw_line(self.start_point, self.end_point)

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from .Point import Point
+from Point import Point
 
 class Renderer(ABC):
     @abstractmethod
@@ -8,11 +8,16 @@ class Renderer(ABC):
         """
         Draw a line from point s to point e.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def fill_polygon(self, points: List[Point]) -> None:
         """
         Fill a polygon defined by a list of points.
         """
-        pass
+        raise NotImplementedError
+    def draw_oval(self, bounding_box):
+        """
+        Draw an oval with the given bounding box.
+        """
+        raise NotImplementedError

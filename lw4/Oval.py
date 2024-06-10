@@ -1,11 +1,12 @@
-from .AbstractGraphicalObject import AbstractGraphicalObject
-from .Point import Point
-from .GeometryUtil import GeometryUtil
-from .Rectangle import Rectangle
-from .GraphicalObject import GraphicalObject
+from Renderer import Renderer
+from AbstractGraphicalObject import AbstractGraphicalObject
+from Point import Point
+from GeometryUtil import GeometryUtil
+from Rectangle import Rectangle
+from GraphicalObject import GraphicalObject
 from typing import Tuple
 
-class LineSegment(AbstractGraphicalObject):
+class Oval(AbstractGraphicalObject):
    def __init__(self, right_point_pos: Tuple = None, bottom_point_pos: Tuple = None):
         if right_point_pos is None or bottom_point_pos is None:
             right_point = Point(10, 0)
@@ -32,4 +33,11 @@ class LineSegment(AbstractGraphicalObject):
         return Rectangle(minX, minY, maxX - minX, maxY - minY)
    
    def duplicate(self) -> 'GraphicalObject':
-      return LineSegment(self.right_point,self.bottom_point)
+      return Oval(self.right_point,self.bottom_point)
+   
+   def render(self, renderer: Renderer) -> None:
+      bounding_box = (self.right_point.x - abs(self.right_point.x - self.bottom_point.x),
+                        self.right_point.y - abs(self.right_point.y - self.bottom_point.y),
+                        self.right_point.x + abs(self.right_point.x - self.bottom_point.x),
+                        self.right_point.y + abs(self.right_point.y - self.bottom_point.y))
+      renderer.draw_oval(bounding_box)

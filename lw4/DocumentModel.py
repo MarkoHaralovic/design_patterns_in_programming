@@ -1,7 +1,7 @@
-from .Point import Point
-from .Rectangle import Rectangle
-from .DocumentModelListener import DocumentModelListener
-from .GraphicalObject import GraphicalObject
+from Point import Point
+from Rectangle import Rectangle
+from DocumentModelListener import DocumentModelListener
+from GraphicalObject import GraphicalObject
 from typing import List
 from collections.abc import Sequence
 

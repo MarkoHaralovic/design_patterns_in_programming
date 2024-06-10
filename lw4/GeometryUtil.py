@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
-from .Point import Point
-from .Rectangle import Rectangle
+from Point import Point
+from Rectangle import Rectangle
 
 class GeometryUtil:
    def __init__(self):
