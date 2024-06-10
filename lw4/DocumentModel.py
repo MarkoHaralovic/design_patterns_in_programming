@@ -19,8 +19,8 @@ class DocumentModel:
     SELECTION_PROXIMITY = 10
 
     def __init__(self):
-        self.objects = []
-        self.selected_objects = []
+        self._objects = []
+        self._selected_objects = []
         self.listeners = []
     
     @property
@@ -32,12 +32,11 @@ class DocumentModel:
         return ReadOnlyList(self._selected_objects)
      
     def add_graphical_object(self, obj: GraphicalObject):
-        if obj not in self._objects:
-            self._objects.append(obj)
-            obj.add_listener(self)
-            self.notify_listeners("Added a new object")
-            if obj.selected:
-                self._selected_objects.append(obj)
+        self._objects.append(obj)
+        obj.addGraphicalObjectListener(self)
+        self.notify_listeners("Added a new object")
+        if obj.selected:
+            self._selected_objects.append(obj)
 
     def remove_graphical_object(self, obj: GraphicalObject):
         if obj in self._objects:

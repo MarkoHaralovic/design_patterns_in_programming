@@ -9,8 +9,10 @@ class Point:
        return self.y
     
    def translate(self,dp:'Point')->'Point':
-      return Point(self.getX+dp.getX, self.y+dp.getY)
+      return Point(self.getX()+dp.getX(), self.y+dp.getY())
    
    def difference(self,p:'Point')->'Point':
-      return Point(self.getX-p.getX, self.getY-p.getY)
+       print(self)
+       print(p)
+       return Point(self.getX()-p.getX(), self.getY()-p.getY())
    
