@@ -24,12 +24,12 @@ class Oval(AbstractGraphicalObject):
       return "Oval"
    
    def getBoundingBox(self) -> Rectangle:
-        minX = min(self.right_point.x, self.bottom_point.x)
-        maxX = max(self.right_point.x, self.bottom_point.x)
-        minY = min(self.right_point.y, self.bottom_point.y)
-        maxY = max(self.right_point.y, self.bottom_point.y)
-        return Rectangle(minX, minY, maxX - minX, maxY - minY)
-   
+      minX = min(self.right_point.x, self.bottom_point.x)
+      maxX = max(self.right_point.x, self.bottom_point.x)
+      minY = min(self.right_point.y, self.bottom_point.y)
+      maxY = max(self.right_point.y, self.bottom_point.y)
+      return Rectangle(minX, minY, 2 *(maxX - minX), 2*(maxY -minY))
+      
    def duplicate(self) -> 'GraphicalObject':
       return Oval(self.right_point, self.bottom_point)
    

@@ -72,21 +72,30 @@ class DocumentModel:
     def find_selected_graphical_object(self, mouse_point: Point) -> GraphicalObject:
         closest, min_dist = None, float('inf')
         for obj in self._objects:
-            dist = obj.distance_to_point(mouse_point)
+            print(f"Mouse point x : {mouse_point.getX()}")
+            print(f"Mouse point y : {mouse_point.getY()}")
+            print(f"Obj : {obj}")
+            dist = obj.selectionDistance(mouse_point)
             if dist <= self.SELECTION_PROXIMITY and dist < min_dist:
                 closest, min_dist = obj, dist
+        print(f"Closest : {closest}")
         return closest
 
     def increase_z(self, obj: GraphicalObject):
         if obj in self.objects:
             index = self.objects.index(obj)
             if index < len(self.objects) - 1:
-                self.objects[index], self.objects[index + 1] = self.objects[index + 1], self.objects[index]
+                self._objects[index], self._objects[index + 1] = self._objects[index + 1], self._objects[index]
                 self.notify_listeners("Increased Z position")
 
     def decrease_z(self, obj: GraphicalObject):
         if obj in self.objects:
             index = self.objects.index(obj)
             if index > 0:
-                self.objects[index], self.objects[index - 1] = self.objects[index - 1], self.objects[index]
+                self._objects[index], self._objects[index - 1] = self._objects[index - 1], self._objects[index]
                 self.notify_listeners("Decreased Z position")
+        
+    def graphicalObjectChanged(self, obj: GraphicalObject):
+        """Handle notifications that a graphical object has changed."""
+        self.notify_listeners(f"Graphical object {obj} has changed.")
+    

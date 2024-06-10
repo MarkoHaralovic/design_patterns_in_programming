@@ -16,8 +16,15 @@ class Renderer(ABC):
         Fill a polygon defined by a list of points.
         """
         raise NotImplementedError
+    @abstractmethod
     def draw_oval(self, bounding_box):
         """
         Draw an oval with the given bounding box.
+        """
+        raise NotImplementedError
+    @abstractmethod
+    def draw_point(self,point):
+        """
+        Draw a point at the given point.
         """
         raise NotImplementedError

@@ -48,20 +48,21 @@ class AbstractGraphicalObject(GraphicalObject):
         self.selected = selected
         self.notifySelectionListeners()
 
-    def translate(self, delta: Point) -> None:
+    def translate(self, delta: Point):
         for i in range(len(self.hotPoints)):
             self.hotPoints[i] = self.hotPoints[i].translate(delta)
         self.notifyListeners()
-
+        
     def addGraphicalObjectListener(self, listener) -> None:
         self.listeners.append(listener)
 
     def removeGraphicalObjectListener(self, listener) -> None:
         self.listeners.remove(listener)
 
-    def notifyListeners(self) -> None:
+    def notifyListeners(self):
         for listener in self.listeners:
-            listener.graphicalObjectChanged(self)
+            if hasattr(listener, 'graphicalObjectChanged'):
+                listener.graphicalObjectChanged(self)
 
     def notifySelectionListeners(self) -> None:
         for listener in self.listeners:
